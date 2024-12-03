@@ -5,18 +5,21 @@
   "main": "example.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "nodemon example.js"
+    "debug": "nodemon dist/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.5",
-    "eris": "^0.18.0"
+    "eris": "^0.18.0",
+    "node-cron": "^3.0.3"
   },
   "devDependencies": {
+    "@types/node": "^22.10.1",
     "eslint": "^9.16.0",
     "nodemon": "^3.1.7",
-    "prettier": "^3.4.1"
+    "prettier": "^3.4.1",
+    "typescript": "^5.7.2"
   }
 }
