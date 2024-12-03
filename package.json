@@ -11,12 +11,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "colors": "^1.4.0",
     "dotenv": "^16.4.5",
     "eris": "^0.18.0",
-    "node-cron": "^3.0.3"
+    "node-cron": "^3.0.3",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
+    "@types/node-cron": "^3.0.11",
     "eslint": "^9.16.0",
     "nodemon": "^3.1.7",
     "prettier": "^3.4.1",
