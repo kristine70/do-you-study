@@ -5,7 +5,7 @@ import config from '../config';
 
 export default class CronJobReminder {
   schedule(client: Client, channelID: string, msgContent: MessageContent) {
-    logger.info('The cronjob is scheduled.');
+    logger.info('The Cronjob Scheduled Successfully.');
     cron.schedule(config.REMINDER_TIME, () => {
       if (client) {
         client.createMessage(channelID, msgContent);
