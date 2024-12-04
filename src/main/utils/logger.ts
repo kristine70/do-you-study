@@ -24,13 +24,3 @@ export const logger = createLogger({
   ),
   transports: formatTransports,
 });
-
-export const symbolLogger = createLogger({
-  format: format.combine(
-    format.timestamp(timestampFormat),
-    format.printf(({ message, timestamp }) => {
-      return `======= ${message} ${timestamp} ! =======`;
-    }),
-  ),
-  transports: formatTransports,
-});
