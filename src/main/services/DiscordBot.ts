@@ -3,15 +3,14 @@ import dotenv from 'dotenv';
 import config from '../config';
 import { connectDB } from '../db/db';
 import { logger } from '../utils/logger';
-import MembersDB from '../db/MembersService';
 import CronJobReminder from './CronJobReminder';
+import GuildMembers from '../db/MembersService';
 
 dotenv.config();
 
 export default class DiscordBot {
   async run() {
     await connectDB();
-    const memberDb = new MembersDB();
     const reminder = new CronJobReminder();
 
     const bot = new Client(process.env.TOKEN!, {
@@ -27,14 +26,14 @@ export default class DiscordBot {
       logger.error(`[Bot Error] ${err}`);
     });
 
-    this.updateMember(bot, memberDb);
+    this.updateMember(bot);
 
     bot.connect();
   }
-  updateMember(bot: Client, Member: MembersDB) {
+  updateMember(bot: Client) {
     bot.on('guildMemberAdd', async (_guild, member) => {
       const time = new Date(member.joinedAt || Date.now());
-      await Member.AddOneMember(member.user.id, time);
+      await GuildMembers.AddOneMember(member.user.id, time);
       logger.info(
         `Member added successfully: id=${member.user.id} time=${time.toJSON()}`,
       );
@@ -42,27 +41,27 @@ export default class DiscordBot {
 
     bot.on('voiceChannelJoin', async (member) => {
       const time = new Date();
-      await Member.UpdateLastVCTime(member.user.id, time);
+      await GuildMembers.UpdateLastVCTime(member.user.id, time);
       logger.info(`VC Join: ${member.user.id} ${time.toJSON()}`);
     });
     bot.on('voiceChannelSwitch', async (member) => {
       const time = new Date();
-      await Member.UpdateLastVCTime(member.user.id, time);
+      await GuildMembers.UpdateLastVCTime(member.user.id, time);
       logger.info(`VC Switch: ${member.user.id} ${time.toJSON()}`);
     });
     bot.on('voiceChannelLeave', async (member) => {
       const time = new Date();
-      await Member.UpdateLastVCTime(member.user.id, time);
+      await GuildMembers.UpdateLastVCTime(member.user.id, time);
       logger.info(`VC Leave: ${member.user.id} ${time.toJSON()}`);
     });
   }
-  async initMemberDB(bot: Client, Member: MembersDB) {
+  async initMemberDB(bot: Client) {
     try {
       const guild = bot.guilds.find((g) => g.id == config.SERVER_ID);
       await guild!.fetchAllMembers();
       const date = new Date();
       guild!.members.forEach(async (m) => {
-        await Member.AddOneMember(m.id, date);
+        await GuildMembers.AddOneMember(m.id, date);
       });
     } catch (error) {
       logger.error(`Guilds Find Error: ${error}`);
