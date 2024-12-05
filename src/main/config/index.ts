@@ -9,6 +9,7 @@ const config = {
 
   //*global constants
   DATE_FORMAT: 'YYYY-MM-DD',
+  DATE_TIME_FORMAT: 'YYYY-MM-DD HH:mm:ss',
   LOCAL_TIMEZONE: 'America/Los_Angeles',
 };
 

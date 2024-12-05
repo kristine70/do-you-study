@@ -11,7 +11,7 @@
 ## Set up Environment
 
 1. npm install
-2. download mongoDB, start
+2. download mongoDB, start `sudo systemctl start mongod`
 3. connect mongoDB with ssh and mongoDB compass
 4. ssh vscode to the cloud server (edit ~/.ssh/config file)
 5. add .env file

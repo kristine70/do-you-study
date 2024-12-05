@@ -23,7 +23,6 @@ ${mentions.join(' ')}
         content: messageContent,
         allowedMentions: { users: days7 },
       });
-      logger.info(`Reminder List: ${days7.toString()}`);
     }
 
     if (days14.length > 0) {
@@ -32,6 +31,8 @@ ${mentions.join(' ')}
         allowedMentions: { users: days14 },
       });
     }
+    logger.info(`7days List: ${days7.toString()}
+14days List: ${days14.toString()}`);
   }
   async GetRemindList() {
     const list = (await GuildMembers.GetUnRetireList()) || [];
