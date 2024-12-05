@@ -34,25 +34,24 @@ export default class DiscordBot {
     bot.on('guildMemberAdd', async (_guild, member) => {
       const time = new Date(member.joinedAt || Date.now());
       await GuildMembers.AddOneMember(member.user.id, time);
-      logger.info(
-        `Member added successfully: id=${member.user.id} time=${time.toJSON()}`,
-      );
+      logger.info(`Member added successfully: id=${member.user.id}`);
+    });
+    bot.on('guildMemberRemove', async (_guild, member) => {
+      await GuildMembers.DeleteOneMember(member.user.id);
+      logger.info(`Member deleted successfully: id=${member.user.id}`);
     });
 
     bot.on('voiceChannelJoin', async (member) => {
-      const time = new Date();
-      await GuildMembers.UpdateLastVCTime(member.user.id, time);
-      logger.info(`VC Join: ${member.user.id} ${time.toJSON()}`);
+      await GuildMembers.UpdateLastVCTime(member.user.id, new Date());
+      logger.info(`VC Join: ${member.user.id}`);
     });
     bot.on('voiceChannelSwitch', async (member) => {
-      const time = new Date();
-      await GuildMembers.UpdateLastVCTime(member.user.id, time);
-      logger.info(`VC Switch: ${member.user.id} ${time.toJSON()}`);
+      await GuildMembers.UpdateLastVCTime(member.user.id, new Date());
+      logger.info(`VC Switch: ${member.user.id}`);
     });
     bot.on('voiceChannelLeave', async (member) => {
-      const time = new Date();
-      await GuildMembers.UpdateLastVCTime(member.user.id, time);
-      logger.info(`VC Leave: ${member.user.id} ${time.toJSON()}`);
+      await GuildMembers.UpdateLastVCTime(member.user.id, new Date());
+      logger.info(`VC Leave: ${member.user.id}`);
     });
   }
   async initMemberDB(bot: Client) {

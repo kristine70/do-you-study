@@ -25,6 +25,13 @@ class MembersService {
       logger.error(`AddOneMember Error: ${JSON.stringify(error)}`);
     }
   }
+  async DeleteOneMember(user_id: string) {
+    try {
+      await MemberDbApi.deleteOne({ user_id });
+    } catch (error) {
+      logger.error(`DeleteOneMember Error: ${JSON.stringify(error)}`);
+    }
+  }
   async GetUnRetireList() {
     try {
       const list = await MemberDbApi.find({ retire: false });

@@ -6,7 +6,6 @@ const config = {
   REMINDER_DAYS: 8,
   KICK_DAYS: 15,
   BOT_REMINDER_TIME: '0 9 * * *',
-  // BOT_REMINDER_TIME: '* * * * *',
 
   //*global constants
   DATE_FORMAT: 'YYYY-MM-DD',
