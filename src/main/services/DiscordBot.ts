@@ -19,7 +19,7 @@ export default class DiscordBot {
 
     bot.on('ready', () => {
       logger.info('=============== Bot is ready! ==============');
-      reminder.schedule(bot, config.REMINDER_CHANNEL_ID, 'This is a test msg');
+      reminder.schedule(bot);
     });
 
     bot.on('error', (err: any) => {

@@ -2,16 +2,15 @@ import { Client, MessageContent } from 'eris';
 import cron from 'node-cron';
 import { logger } from '../utils/logger';
 import config from '../config';
+import reminderMessage from './ReminderMessage';
 
 export default class CronJobReminder {
-  schedule(client: Client, channelID: string, msgContent: MessageContent) {
+  schedule(client: Client) {
     logger.info('The Cronjob Scheduled Successfully.');
-    cron.schedule(config.BOT_REMINDER_TIME, () => {
-      if (client) {
-        client.createMessage(channelID, msgContent);
-      } else {
-        logger.error('Channel not found. Please check the CHANNEL_ID.');
-      }
-    });
+    cron.schedule(
+      config.BOT_REMINDER_TIME,
+      () => reminderMessage.SendRemindMessage(client),
+      { timezone: config.LOCAL_TIMEZONE },
+    );
   }
 }
