@@ -11,15 +11,10 @@ dotenv.config();
 export default class DiscordBot {
   async run() {
     await connectDB();
-    const reminder = new CronJobReminder();
 
+    const reminder = new CronJobReminder();
     const bot = new Client(process.env.TOKEN!, {
       intents: [Constants.Intents.all],
-    });
-
-    bot.on('ready', () => {
-      logger.info('=============== Bot is ready! ==============');
-      reminder.schedule(bot);
     });
 
     bot.on('error', (err: any) => {
@@ -28,7 +23,8 @@ export default class DiscordBot {
 
     this.updateMember(bot);
 
-    bot.connect();
+    await bot.connect();
+    reminder.schedule(bot);
   }
   updateMember(bot: Client) {
     bot.on('guildMemberAdd', async (_guild, member) => {
