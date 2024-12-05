@@ -61,7 +61,9 @@ export default class DiscordBot {
       await guild!.fetchAllMembers();
       const date = new Date();
       guild!.members.forEach(async (m) => {
-        await GuildMembers.AddOneMember(m.id, date);
+        if (!m.bot) {
+          await GuildMembers.AddOneMember(m.id, date);
+        }
       });
     } catch (error) {
       logger.error(`Guilds Find Error: ${error}`);
