@@ -36,11 +36,17 @@ ${mentions.join(' ')}
   async GetRemindList() {
     const list = (await GuildMembers.GetUnRetireList()) || [];
     const days7 = list
-      .filter((m) => T(dayjs().subtract(7, 'day')) === T(dayjs(m.last_vc_time)))
+      .filter(
+        (m) =>
+          T(dayjs().subtract(config.REMINDER_DAYS, 'day')) ===
+          T(dayjs(m.last_vc_time)),
+      )
       .map((m) => m.user_id);
     const days14 = list
       .filter(
-        (m) => T(dayjs().subtract(14, 'day')) === T(dayjs(m.last_vc_time)),
+        (m) =>
+          T(dayjs().subtract(config.KICK_DAYS, 'day')) ===
+          T(dayjs(m.last_vc_time)),
       )
       .map((m) => m.user_id);
     return { days7, days14 };
