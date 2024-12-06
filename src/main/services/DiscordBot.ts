@@ -17,7 +17,7 @@ export default class DiscordBot {
       intents: [Constants.Intents.all],
     });
 
-    bot.on('error', (err: any) => logger.error(`[Bot Error] ${err}`));
+    bot.on('error', (err: any) => logger.error(`Bot ${err}`));
     bot.on('ready', () => logger.debug('Bot is ready! '));
 
     this.updateMember(bot);
