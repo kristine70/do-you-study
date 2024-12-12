@@ -4,7 +4,7 @@ import { logger } from '../utils/logger';
 import config from '../config';
 import reminderMessage from './ReminderMessage';
 
-export default class CronJobReminder {
+class CronJobReminder {
   schedule(client: Client) {
     logger.info('The Cronjob Scheduled Successfully.');
     cron.schedule(
@@ -14,3 +14,5 @@ export default class CronJobReminder {
     );
   }
 }
+
+export default new CronJobReminder();

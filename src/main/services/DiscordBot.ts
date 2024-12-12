@@ -5,6 +5,7 @@ import { connectDB } from '../db/db';
 import { logger } from '../utils/logger';
 import CronJobReminder from './CronJobReminder';
 import GuildMembers from '../db/MembersService';
+// import ReminderMessage from './ReminderMessage';
 
 dotenv.config();
 
@@ -12,18 +13,20 @@ export default class DiscordBot {
   async run() {
     await connectDB();
 
-    const reminder = new CronJobReminder();
     const bot = new Client(process.env.TOKEN!, {
       intents: [Constants.Intents.all],
     });
 
     bot.on('error', (err: any) => logger.error(`Bot ${err}`));
-    bot.on('ready', () => logger.debug('Bot is ready! '));
+    bot.on('ready', () => {
+      logger.debug('Bot is ready! ');
+      // ReminderMessage.sendOneMessage(bot);
+    });
 
     this.updateMember(bot);
 
     await bot.connect();
-    reminder.schedule(bot);
+    CronJobReminder.schedule(bot);
   }
   updateMember(bot: Client) {
     bot.on('guildMemberAdd', async (_guild, member) => {
