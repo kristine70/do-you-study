@@ -12,7 +12,7 @@ const messageContent = (
 学习目标都完成了吗？已经可以做到很好的自律了吗？
 ${mentions.join(' ')}
 
-是否需要帮助或有任何疑问呢？欢迎随时聊天反馈～ 如果未来 7 天内仍未参与__学习房间__，将会被移出小组。以后可以随时重新加入！感谢你的理解与支持！
+是否需要帮助或有任何疑问呢？欢迎随时聊天反馈～ 如果未来 **7** 天内仍未参与__学习房间__，将会被移出小组。以后可以随时重新加入！感谢你的理解与支持！
 -# 请假方式： 修改昵称，加上请假结束日期（如：xx-请假到12/02），bot会从请假结束日开始统计。`;
 
 const filterRemindIdList = (list: MembersDbSchema[], days: number) =>
@@ -25,8 +25,8 @@ const filterRemindIdList = (list: MembersDbSchema[], days: number) =>
 class ReminderMessage {
   async SendRemindMessage(bot: Client) {
     const { days7, days14 } = await this.GetRemindList();
-    logger.info(`7 days List: [${days7.toString()}]`);
-    logger.info(`14 days List: [${days14.toString()}]`);
+    logger.info(` 7 days List: ${JSON.stringify(days7)}`);
+    logger.info(`14 days List: ${JSON.stringify(days14)}`);
 
     if (days7.length > 0) await this.sendOnePublicReminderMessage(bot, days7);
 
@@ -55,7 +55,7 @@ class ReminderMessage {
         bot,
         messageContent(messageMentionContent),
         mentionList,
-        config.MANAGER_CHANNEL_ID,
+        config.PUBLIC_REMINDER_CHANNEL_ID,
       );
     }
   }
