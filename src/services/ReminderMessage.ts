@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import config from '../config';
 import GuildMembers from '../db/MembersService';
-import { Client, MessageContent } from 'eris';
+import { Client } from 'eris';
 import { logger } from '../utils/logger';
 
 const T = (t: dayjs.Dayjs) => t.format(config.DATE_FORMAT);
