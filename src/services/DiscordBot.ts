@@ -5,7 +5,7 @@ import { connectDB } from '../db/db';
 import { logger } from '../utils/logger';
 import CronJobReminder from './CronJobReminder';
 import GuildMembers from '../db/MembersService';
-import ReminderMessage from './ReminderMessage';
+//* import ReminderMessage from './ReminderMessage';
 
 dotenv.config();
 
@@ -20,7 +20,7 @@ export default class DiscordBot {
     bot.on('error', (err: any) => logger.error(`Bot ${err}`));
     bot.on('ready', () => {
       logger.debug('Bot is ready! ');
-      ReminderMessage.sendOneMessage(bot);
+      //* ReminderMessage.sendOneMessage(bot);
     });
 
     this.updateMember(bot);

@@ -25,13 +25,23 @@ class ReminderMessage {
 
     if (days7.length > 0) {
       const mentions7 = days7.map((id) => `<@${id}>`);
-      await this.createOneDiscordMessage(bot, messageContent(mentions7), days7);
+      await this.createOneDiscordMessage(
+        bot,
+        messageContent(mentions7),
+        days7,
+        config.MANAGER_CHANNEL_ID,
+      );
     }
 
     if (days14.length > 0) {
       const mentions14 =
         '## 14 Days\n' + days14.map((id) => `<@${id}>`).join(' ');
-      await this.createOneDiscordMessage(bot, mentions14, days14);
+      await this.createOneDiscordMessage(
+        bot,
+        mentions14,
+        days14,
+        config.MANAGER_CHANNEL_ID,
+      );
     }
   }
   async GetRemindList() {
@@ -56,16 +66,22 @@ class ReminderMessage {
     const mentionList = oneMentionList.split(',');
     const mentions = mentionList.map((id) => `<@${id}>`);
     if (mentionList.length > 0) {
-      this.createOneDiscordMessage(bot, messageContent(mentions), mentionList);
+      this.createOneDiscordMessage(
+        bot,
+        messageContent(mentions),
+        mentionList,
+        config.MANAGER_CHANNEL_ID,
+      );
     }
   }
   async createOneDiscordMessage(
     bot: Client,
     messageContent: string,
     users: string[],
+    reminderChannelId: string,
   ) {
     try {
-      await bot.createMessage(config.REMINDER_CHANNEL_ID, {
+      await bot.createMessage(reminderChannelId, {
         content: messageContent,
         allowedMentions: { users: users },
       });
