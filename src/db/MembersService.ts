@@ -1,6 +1,13 @@
 import mongoose from 'mongoose';
 import { logger } from '../utils/logger';
 
+export interface MembersDbSchema extends Document {
+  user_id: string;
+  last_vc_time: NativeDate;
+  day_off: NativeDate;
+  retire: boolean;
+}
+
 const membersSchema = new mongoose.Schema({
   user_id: { type: String, required: true, unique: true },
   last_vc_time: { type: Date, required: true, default: new Date() },
@@ -8,7 +15,7 @@ const membersSchema = new mongoose.Schema({
   retire: { type: Boolean, required: true, default: false },
 });
 membersSchema.index({ user_id: 'text' }, { unique: true });
-const MemberDbApi = mongoose.model('main_db', membersSchema);
+const MemberDbApi = mongoose.model<MembersDbSchema>('main_db', membersSchema);
 
 class MembersService {
   async UpdateLastVCTime(user_id: string, last_vc_time: Date) {

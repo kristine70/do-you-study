@@ -20,7 +20,7 @@ export default class DiscordBot {
     bot.on('error', (err: any) => logger.error(`Bot ${err}`));
     bot.on('ready', () => {
       logger.debug('Bot is ready! ');
-      //* ReminderMessage.sendOneMessage(bot);
+      //* ReminderMessage.sendOnePublicReminderMessage(bot, []);
     });
 
     this.updateMember(bot);
