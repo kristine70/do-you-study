@@ -11,6 +11,7 @@ const config = {
   DATE_FORMAT: 'YYYY-MM-DD',
   DATE_TIME_FORMAT: 'YYYY-MM-DD HH:mm:ss',
   LOCAL_TIMEZONE: 'America/Los_Angeles',
+  DEFAULT_DATE: '2000-01-01',
 };
 
 export default config;

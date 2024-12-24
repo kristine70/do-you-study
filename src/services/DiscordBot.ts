@@ -5,6 +5,7 @@ import { connectDB } from '../db/db';
 import { logger } from '../utils/logger';
 import CronJobReminder from './CronJobReminder';
 import GuildMembers from '../db/MembersService';
+import dayjs from 'dayjs';
 
 dotenv.config();
 
@@ -37,18 +38,21 @@ export default class DiscordBot {
       logger.info(`Member deleted successfully: id=${member.user.id}`);
     });
 
-    bot.on('voiceChannelJoin', async (member) => {
-      await GuildMembers.UpdateLastVCTime(member.user.id, new Date());
-      logger.info(`VC Join: ${member.user.id}`);
-    });
-    bot.on('voiceChannelSwitch', async (member) => {
-      await GuildMembers.UpdateLastVCTime(member.user.id, new Date());
-      logger.info(`VC Switch: ${member.user.id}`);
-    });
-    bot.on('voiceChannelLeave', async (member) => {
-      await GuildMembers.UpdateLastVCTime(member.user.id, new Date());
-      logger.info(`VC Leave: ${member.user.id}`);
-    });
+    bot.on(
+      'voiceChannelJoin',
+      async (member) =>
+        await this.updateLastVCTime(member.user.id, 'Voice Join'),
+    );
+    bot.on(
+      'voiceChannelSwitch',
+      async (member) =>
+        await this.updateLastVCTime(member.user.id, 'Voice Switch'),
+    );
+    bot.on(
+      'voiceChannelLeave',
+      async (member) =>
+        await this.updateLastVCTime(member.user.id, 'Voice Leave'),
+    );
   }
   async initMemberDB(bot: Client) {
     try {
@@ -62,6 +66,16 @@ export default class DiscordBot {
       });
     } catch (error) {
       logger.error(`Guilds Find Error: ${error}`);
+    }
+  }
+  async updateLastVCTime(id: string, type: string) {
+    const lastTime = await GuildMembers.GetOneLastVCTime(id);
+    const now = new Date();
+    if (dayjs(lastTime).isBefore(dayjs(now))) {
+      await GuildMembers.UpdateLastVCTime(id, now);
+      logger.info(`Update Last VC Time [${type}]: id=${id}`);
+    } else {
+      logger.info(`Action Before Day Off [${type}]: id=${id}`);
     }
   }
 }

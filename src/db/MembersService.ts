@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { logger } from '../utils/logger';
+import config from '../config';
 
 export interface MembersDbSchema extends Document {
   user_id: string;
@@ -11,7 +12,7 @@ export interface MembersDbSchema extends Document {
 const membersSchema = new mongoose.Schema({
   user_id: { type: String, required: true, unique: true },
   last_vc_time: { type: Date, required: true, default: new Date() },
-  day_off: { type: Date, default: new Date('2000-01-01') },
+  day_off: { type: Date, default: new Date(config.DEFAULT_DATE) },
   retire: { type: Boolean, required: true, default: false },
 });
 membersSchema.index({ user_id: 'text' }, { unique: true });
@@ -40,12 +41,24 @@ class MembersService {
     }
   }
   async GetUnRetireList() {
+    let list: MembersDbSchema[] | null = [];
     try {
-      const list = await MemberDbApi.find({ retire: false });
-      return list;
+      list = await MemberDbApi.find({ retire: false });
     } catch (error) {
       logger.error(`GetUnRetireList Error: ${JSON.stringify(error)}`);
     }
+    return list || [];
+  }
+  async GetOneLastVCTime(id: string) {
+    let member: MembersDbSchema | null = null;
+    try {
+      member = await MemberDbApi.findOne({ user_id: id });
+    } catch (error) {
+      logger.error(
+        `OneLastVCTime Find Error: id=${id} ${JSON.stringify(error)}`,
+      );
+    }
+    return member?.last_vc_time || new Date(config.DEFAULT_DATE);
   }
 }
 const GuildMembers = new MembersService();

@@ -13,7 +13,7 @@ const messageContent = (
 ${mentions.join(' ')}
 如果未来 7 天内仍未参与__学习房间__，将会被移出小组。以后可以随时重新加入！感谢你的理解与支持。
 -# 请假方式： 修改昵称，加上请假结束日期（如：xx-请假到12/02），bot会从请假结束日开始统计。
--# 在小组待满三个月，将会获得“⭐️Study Star”称号，只提醒不踢。`;
+-# 在小组待满三个月，将会获得“⭐️Study Star”称号，不会被踢。`;
 
 const filterRemindIdList = (list: MembersDbSchema[], days: number) =>
   list
