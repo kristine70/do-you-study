@@ -28,30 +28,23 @@ export default class DiscordBot {
     CronJobReminder.schedule(bot);
   }
   updateMember(bot: Client) {
-    bot.on('guildMemberAdd', async (_guild, member) => {
-      const time = new Date(member.joinedAt || Date.now());
-      await GuildMembers.AddOneMember(member.user.id, time);
-      logger.info(`Member added successfully: id=${member.user.id}`);
-    });
-    bot.on('guildMemberRemove', async (_guild, member) => {
-      await GuildMembers.DeleteOneMember(member.user.id);
-      logger.info(`Member deleted successfully: id=${member.user.id}`);
-    });
-
-    bot.on(
-      'voiceChannelJoin',
-      async (member) =>
-        await this.updateLastVCTime(member.user.id, 'Voice Join'),
+    bot.on('guildMemberAdd', (_guild, member) =>
+      GuildMembers.AddOneMember(
+        member.user.id,
+        new Date(member.joinedAt || Date.now()),
+      ),
     );
-    bot.on(
-      'voiceChannelSwitch',
-      async (member) =>
-        await this.updateLastVCTime(member.user.id, 'Voice Switch'),
+    bot.on('guildMemberRemove', (_guild, member) =>
+      GuildMembers.DeleteOneMember(member.user.id),
     );
-    bot.on(
-      'voiceChannelLeave',
-      async (member) =>
-        await this.updateLastVCTime(member.user.id, 'Voice Leave'),
+    bot.on('voiceChannelJoin', (member) =>
+      this.updateLastVCTime(member.user.id, 'Voice Join'),
+    );
+    bot.on('voiceChannelSwitch', (member) =>
+      this.updateLastVCTime(member.user.id, 'Voice Switch'),
+    );
+    bot.on('voiceChannelLeave', (member) =>
+      this.updateLastVCTime(member.user.id, 'Voice Leave'),
     );
   }
   async initMemberDB(bot: Client) {
