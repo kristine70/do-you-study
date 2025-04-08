@@ -6,6 +6,13 @@ dotenv.config();
 import {logger} from './logger';
 import {exit} from 'node:process';
 
+export interface MembersDbSchema {
+  user_id: string;
+  user_name: string;
+  last_vc_time: string;
+  study_star: boolean;
+}
+
 export const connectDB = () => {
   try {
     const db: Sqlite3.Database = new Sqlite3(process.env.SQLITE_FILE, {

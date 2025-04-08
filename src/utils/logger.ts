@@ -1,5 +1,5 @@
 import {createLogger, format, transports} from 'winston';
-import {timeString} from './date';
+import {currentTimeString} from './date';
 
 const S = (s: unknown) => String(s).trim();
 
@@ -13,7 +13,7 @@ const formatTransports = [
 
 export const logger = createLogger({
   format: format.combine(
-    format.timestamp({format: timeString}),
+    format.timestamp({format: currentTimeString}),
     format.printf(
       ({timestamp, level, message}) =>
         `${timestamp as string} [${level.toUpperCase()}] ${S(message)}`,

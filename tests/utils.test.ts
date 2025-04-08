@@ -1,11 +1,13 @@
 import {logger} from '../src/utils/logger';
-import {timeString} from '../src/utils/date';
+import {currentTimeString, parseTime, stringfyTime} from '../src/utils/date';
 
-test('timeString Correct', () => {
-  expect(timeString());
+test('[Date Utils] Parse Time String', () => {
+  expect(parseTime('2025-04-07 12:21:42')).toEqual(new Date('2025-04-07 12:21:42'));
+  expect(parseTime('wer dfasdf')).toEqual(new Date());
+  expect(stringfyTime(new Date('2025-04-07 22:10:14'))).toEqual('2025-04-07 22:10:14');
 });
 
 logger.info('test test info');
 logger.error('test test error');
 logger.debug('test test debug');
-console.log(timeString());
+console.log(currentTimeString());
