@@ -1,3 +1,3 @@
-import DiscordBot from './services/DiscordBot';
+import { startBot } from "./services/bot";
 
-new DiscordBot().run();
+startBot();
