@@ -1,9 +1,10 @@
 import {logger} from '../src/utils/logger';
-import {currentTimeString, parseTime, stringfyTime} from '../src/utils/date';
+import {currentTimeString, parseTime, stringfyTime, beforeXdays} from '../src/utils/date';
 
 test('[Date Utils] Parse Time String', () => {
   expect(parseTime('2025-04-07 12:21:42')).toEqual(new Date('2025-04-07 12:21:42'));
   expect(parseTime('wer dfasdf')).toEqual(new Date());
+  expect(beforeXdays(parseTime('2025-04-15 12:21:42'), 3)).toEqual(true);
   expect(stringfyTime(new Date('2025-04-07 22:10:14'))).toEqual('2025-04-07 22:10:14');
 });
 

@@ -27,3 +27,7 @@ export const parseTime = (timeString: string): Date => {
 
 export const stringfyTime = (time: Date) =>
   dayjs(time).tz(config.LOCAL_TIMEZONE).format(DATE_TIME_FORMAT);
+
+export const beforeXdays = (t: Date, x: number) => {
+  return dayjs().subtract(x, 'day').format(DATE_FORMAT) === dayjs(t).format(DATE_FORMAT);
+};

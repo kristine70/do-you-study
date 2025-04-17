@@ -3,16 +3,12 @@ import {logger} from '../utils/logger';
 import {connectDB} from '../utils/database';
 import {stringfyTime} from '../utils/date';
 
-export interface IMembersService {
-  upsert(userId: string, userName: string, lastVCTime: Date): void;
-  delete(userId: string): void;
-}
-
-class MembersService implements IMembersService {
+class MembersService {
   private db: Sqlite3.Database;
   private stmts: {
     upsert: Sqlite3.Statement;
     delete: Sqlite3.Statement;
+    fetchAll: Sqlite3.Statement;
   };
 
   constructor(db?: Sqlite3.Database) {
@@ -27,6 +23,9 @@ class MembersService implements IMembersService {
       `),
       delete: this.db.prepare(`
         DELETE FROM core_members WHERE user_id = ?
+      `),
+      fetchAll: this.db.prepare(`
+        SELECT user_id, last_vc_time FROM core_members
       `),
     };
   }
@@ -56,6 +55,16 @@ class MembersService implements IMembersService {
     } catch (error) {
       logger.error(`[Delete] failed for ${userId}: ${(error as Error).message}`);
     }
+  }
+
+  public fetchAll() {
+    let result: {user_id: string; last_vc_time: string}[] = [];
+    try {
+      result = this.stmts.fetchAll.all();
+    } catch (error) {
+      logger.error(`[fetchAll] failed: ` + (error as Error).message);
+    }
+    return result;
   }
 }
 
