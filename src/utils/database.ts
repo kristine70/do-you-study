@@ -33,7 +33,7 @@ export const initTheDB = () => {
     CREATE TABLE IF NOT EXISTS core_members (
       user_id TEXT UNIQUE PRIMARY KEY NOT NULL,
       user_name TEXT NOT NULL,
-      last_vc_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      last_vc_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
   `);
 

@@ -6,9 +6,6 @@ ${mentions.map((id) => `<@${id}>`).join(' ')}
 -# 在小组待满三个月，将会获得“⭐️Study Star”称号，不会被踢。`;
 
 export default {
-  PUBLIC_REMINDER_CHANNEL_ID: '1291156798207819817',
-  MANAGER_CHANNEL_ID: '1290892979665371176',
-  SERVER_ID: '1290832699975536660',
   REMINDER_DAYS: 7,
   KICK_DAYS: 14,
   BOT_REMINDER_TIME: '0 9 * * *',

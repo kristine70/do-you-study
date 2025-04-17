@@ -1,44 +1,57 @@
-import {Client, GatewayIntentBits, Events} from 'discord.js';
-import * as dotenv from 'dotenv';
+import {Client, GatewayIntentBits, Events, Guild, TextChannel, Snowflake} from 'discord.js';
 import {logger} from '../utils/logger';
-import {exit} from 'node:process';
 import guildMemberService from './member';
-
-dotenv.config();
-
-const bot = new Client({
+const {SERVER_ID, CHANNEL_MANAGER_ID, CHANNEL_PUBLIC_ID} = process.env as Record<string, Snowflake>;
+const clientOptions = {
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildVoiceStates,
   ],
-});
+};
 
-export function startBot() {
-  bindMemeberEvents(bot);
+export class BotClient extends Client {
+  private guildInstance!: Guild;
+  private managerChannel!: TextChannel;
+  private announcementsChannel!: TextChannel;
 
-  bot.login(process.env.TOKEN).catch((error) => {
-    logger.error('bot login ERROR!!!', error);
-    exit(1);
-  });
-}
+  constructor() {
+    super(clientOptions);
+    this.registerEvents();
+  }
 
-function bindMemeberEvents(bot: Client) {
-  // bot login
-  bot.on(Events.ClientReady, () => {
-    logger.info('Bot login successfully!');
-  });
-  // member events
-  bot.on(Events.GuildMemberAdd, (member) => {
-    logger.info(`---- Member Add: id=${member.id} name=${member.displayName}`);
-    guildMemberService.upsert(member.id, member.displayName, new Date());
-  });
-  bot.on(Events.GuildMemberRemove, (member) => {
-    logger.info(`---- Member Delete: id=${member.id} name=${member.displayName}`);
-    guildMemberService.delete(member.id);
-  });
-  bot.on(Events.VoiceStateUpdate, (oldState, newState) => {
-    logger.info(`---- Member Update: id=${newState.id} name=${newState.member?.displayName}`);
-    guildMemberService.upsert(newState.id, newState.member?.displayName, new Date());
-  });
+  private async onReady() {
+    logger.info(`Logged in as ${this.user?.tag}!`);
+
+    this.guildInstance = await this.guilds.fetch(SERVER_ID);
+    if (!(this.guildInstance instanceof Guild)) throw new Error(`GuildInstance Fetch Error!`);
+
+    this.managerChannel = await this.fetchTextChannel(CHANNEL_MANAGER_ID);
+    this.announcementsChannel = await this.fetchTextChannel(CHANNEL_PUBLIC_ID);
+
+    logger.info(`✅ Ready: ${JSON.stringify(this.guildInstance.name)}`);
+  }
+
+  private async fetchTextChannel(id: string): Promise<TextChannel> {
+    const ch = await this.channels.fetch(id);
+    if (!ch || !(ch instanceof TextChannel)) throw new Error(`Channel ${id} is not a TextChannel.`);
+    return ch;
+  }
+
+  private registerEvents(): void {
+    this.on(Events.ClientReady, () => void this.onReady());
+
+    this.on(Events.GuildMemberAdd, (member) => {
+      logger.info(`---- Member Add: id=${member.id} name=${member.displayName}`);
+      guildMemberService.upsert(member.id, member.displayName, new Date());
+    });
+    this.on(Events.GuildMemberRemove, (member) => {
+      logger.info(`---- Member Delete: id=${member.id} name=${member.displayName}`);
+      guildMemberService.delete(member.id);
+    });
+    this.on(Events.VoiceStateUpdate, (oldState, newState) => {
+      logger.info(`---- Member Update: id=${newState.id} name=${newState.member?.displayName}`);
+      guildMemberService.upsert(newState.id, newState.member?.displayName, new Date());
+    });
+  }
 }
