@@ -6,15 +6,15 @@ import guildMemberService from './member';
 
 dotenv.config();
 
-export function startBot() {
-  const bot = new Client({
-    intents: [
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildMembers,
-      GatewayIntentBits.GuildVoiceStates,
-    ],
-  });
+const bot = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildVoiceStates,
+  ],
+});
 
+export function startBot() {
   bindMemeberEvents(bot);
 
   bot.login(process.env.TOKEN).catch((error) => {
@@ -25,7 +25,9 @@ export function startBot() {
 
 function bindMemeberEvents(bot: Client) {
   // bot login
-  bot.on(Events.ClientReady, () => logger.info('Bot login successfully!'));
+  bot.on(Events.ClientReady, () => {
+    logger.info('Bot login successfully!');
+  });
   // member events
   bot.on(Events.GuildMemberAdd, (member) => {
     logger.info(`---- Member Add: id=${member.id} name=${member.displayName}`);
