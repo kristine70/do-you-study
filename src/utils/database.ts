@@ -17,7 +17,6 @@ export const connectDB = () => {
   try {
     const db: Sqlite3.Database = new Sqlite3(process.env.SQLITE_FILE, {
       fileMustExist: true,
-      verbose: logger.debug,
     });
 
     logger.info(`======= SQLite DB Connected: ${process.env.SQLITE_FILE} =======`);
@@ -29,9 +28,7 @@ export const connectDB = () => {
 };
 
 export const initTheDB = () => {
-  const db: Sqlite3.Database = new Sqlite3(process.env.SQLITE_FILE, {
-    verbose: logger.debug,
-  });
+  const db: Sqlite3.Database = new Sqlite3(process.env.SQLITE_FILE);
 
   const createTable = db.prepare(`
     CREATE TABLE IF NOT EXISTS core_members (

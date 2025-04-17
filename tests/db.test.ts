@@ -1,4 +1,8 @@
-import {connectDB} from './../src/utils/database';
+// import guildMembers from '../src/services/member';
 
-// initTheDB();
-connectDB().close();
+test('db', () => {
+  // guildMembers.delete('test_user_1');
+  // guildMembers.delete('test_user_2');
+  // guildMembers.delete('test_user_4');
+  // guildMembers.delete('test_user_5');
+});
