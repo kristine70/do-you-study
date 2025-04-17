@@ -10,7 +10,6 @@ export interface MembersDbSchema {
   user_id: string;
   user_name: string;
   last_vc_time: string;
-  study_star: boolean;
 }
 
 export const connectDB = () => {
@@ -35,7 +34,6 @@ export const initTheDB = () => {
       user_id TEXT UNIQUE PRIMARY KEY NOT NULL,
       user_name TEXT NOT NULL,
       last_vc_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      study_star BOOLEAN NOT NULL DEFAULT 0
     );
   `);
 

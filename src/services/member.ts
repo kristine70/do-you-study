@@ -39,7 +39,7 @@ class MembersService implements IMembersService {
 
       const info = this.stmts.upsert.run(userId, userName, iso);
       if (info.changes === 0) throw new Error('Nothing changed!');
-      else logger.info(`[Upsert] success: userId=${userId}, time=${iso}, changes=${info.changes}`);
+      else logger.info(`[Upsert ${info.changes}] success: id=${userId}`);
     } catch (error) {
       logger.error(`[Upsert] failed for ${userId}: ${(error as Error).message}`);
     }
@@ -52,7 +52,7 @@ class MembersService implements IMembersService {
       const info = this.stmts.delete.run(userId);
 
       if (info.changes === 0) throw new Error('Nothing changed!');
-      else logger.info(`[Delete] success: userId=${userId}, changes=${info.changes}`);
+      else logger.info(`[Delete ${info.changes}] success: id=${userId}`);
     } catch (error) {
       logger.error(`[Delete] failed for ${userId}: ${(error as Error).message}`);
     }
