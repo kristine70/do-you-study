@@ -42,6 +42,7 @@ export class BotClient extends Client {
     this.on(Events.ClientReady, () => void this.onReady());
 
     this.on(Events.GuildMemberAdd, (member) => {
+      if (member.user.bot) return;
       logger.info(`---- Member Add: id=${member.id} name=${member.displayName}`);
       guildMemberService.upsert(member.id, member.displayName, new Date());
     });
@@ -50,6 +51,7 @@ export class BotClient extends Client {
       guildMemberService.delete(member.id);
     });
     this.on(Events.VoiceStateUpdate, (oldState, newState) => {
+      if (newState.member?.user.bot) return;
       logger.info(`---- Member Update: id=${newState.id} name=${newState.member?.displayName}`);
       guildMemberService.upsert(newState.id, newState.member?.displayName, new Date());
     });

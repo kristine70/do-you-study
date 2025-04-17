@@ -1,32 +1,23 @@
+import {BotClient} from './bot';
 import {TextChannel} from 'discord.js';
 import config from '../config';
 import {logger} from '../utils/logger';
+import {getLists} from './list';
 
-//* pass test
-export const sendMessage = async (channel: TextChannel, userIds: string[]) => {
+const sendMessage = async (channel: TextChannel, userIds: string[], content: string) => {
   try {
-    const content = config.MESSAGE_CONTENT(userIds);
     await channel.send({content, allowedMentions: {users: userIds}});
   } catch (error) {
     logger.error('[SEND MESSAGE] fail:', error);
   }
 };
 
-// async SendRemindMessage(bot: Client) {
-//   const { days7, days14 } = await this.GetRemindList();
-//   logger.info(` 7 days List: ${JSON.stringify(days7)}`);
-//   logger.info(`14 days List: ${JSON.stringify(days14)}`);
+export const SendRemindMessage = (bot: BotClient) => {
+  const {list7, list14} = getLists();
+  void sendMessage(bot.managerChannel, list7, config.MESSAGE_CONTENT(list7));
+  void sendMessage(bot.managerChannel, list14, list14);
 
-//   if (days7.length > 0) await this.sendOnePublicReminderMessage(bot, days7);
-
-//   if (days14.length > 0) {
-//     const mentions14 =
-//       '## 14 Days\n' + days14.map((id) => `<@${id}>`).join(' ');
-//     await this.createOneDiscordMessage(
-//       bot,
-//       mentions14,
-//       days14,
-//       config.MANAGER_CHANNEL_ID,
-//     );
-//   }
-// }
+  logger.info(`======log======`);
+  logger.info(` 7 days: ${JSON.stringify(days7)}`);
+  logger.info(`14 days: ${JSON.stringify(days14)}`);
+};
