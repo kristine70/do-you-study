@@ -63,7 +63,7 @@ const sendMessage = async (channel: TextChannel, userIds: string[], content: str
 export const SendRemindMessage = async (bot: BotClient) => {
   const {list7, list14} = await getLists(bot.guildInstance);
   const content14 = `**${stringfyTime(new Date())}**: ${list14.map((id) => `<@${id}>`).join(' ')}`;
-  void sendMessage(bot.managerChannel, list7, config.MESSAGE_CONTENT(list7));
+  if (list7.length > 0) void sendMessage(bot.managerChannel, list7, config.MESSAGE_CONTENT(list7));
   //* change to the public channel
   void sendMessage(bot.managerChannel, list14, content14);
 
