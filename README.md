@@ -1,5 +1,14 @@
 # do-you-study
 
+## Feature checklist
+
+- add one memeber to the db when joining.
+- delete one member from db when leaving.
+- update the time into db when voice state change.
+- send one the message to the announcement channel about one list who haven't been in study room for 7 days
+- send another message to the management channel about 14 days inactive members
+- do not memtion study star
+
 ## Deploy to the Cloud Server
 
 ### AWS ECS
