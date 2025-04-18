@@ -2,7 +2,7 @@ import {Guild, GuildMember, TextChannel} from 'discord.js';
 import {BotClient} from './bot';
 import {logger} from '../utils/logger';
 import guildMemberService from './member';
-import {beforeXdays, parseTime} from '../utils/date';
+import {beforeXdays, parseTime, stringfyTime} from '../utils/date';
 import config from '../config';
 const {REMINDER_DAYS, KICK_DAYS} = config;
 
@@ -11,9 +11,9 @@ interface IListObj {
   list14: string[];
 }
 
-const checkUserState = (user: GuildMember) => {
-  if (user.user.bot) return false;
-  if (user.roles.cache.some((role) => role.name.toLowerCase() === 'study_star')) return false;
+const checkUserState = (guildUser: GuildMember) => {
+  if (!guildUser || guildUser.user.bot) return false;
+  if (guildUser.roles.valueOf().has(process.env.STUDY_STAR_ROLE as string)) return false;
 
   return true;
 };
@@ -62,10 +62,12 @@ const sendMessage = async (channel: TextChannel, userIds: string[], content: str
 
 export const SendRemindMessage = async (bot: BotClient) => {
   const {list7, list14} = await getLists(bot.guildInstance);
+  const content14 = `**${stringfyTime(new Date())}**: ${list14.map((id) => `<@${id}>`).join(' ')}`;
   void sendMessage(bot.managerChannel, list7, config.MESSAGE_CONTENT(list7));
-  void sendMessage(bot.managerChannel, list14, list14.map((id) => `<@${id}>`).join(' ')); //* change to the public channel
+  //* change to the public channel
+  void sendMessage(bot.managerChannel, list14, content14);
 
-  logger.info(`======log======`);
-  logger.info(`- 7 days : ${JSON.stringify(list7)}`);
-  logger.info(`- 14 days: ${JSON.stringify(list14)}`);
+  logger.info(`====== Member Lists ======
+                           - 7 days : ${JSON.stringify(list7)}
+                           - 14 days: ${JSON.stringify(list14)}`);
 };
