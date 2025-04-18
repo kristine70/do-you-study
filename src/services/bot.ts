@@ -1,4 +1,12 @@
-import {Client, GatewayIntentBits, Events, Guild, TextChannel, Snowflake} from 'discord.js';
+import {
+  Client,
+  GatewayIntentBits,
+  Events,
+  Guild,
+  TextChannel,
+  Snowflake,
+  GuildMember,
+} from 'discord.js';
 import {logger} from '../utils/logger';
 import guildMemberService from './member';
 import config from '../config';
@@ -24,25 +32,15 @@ export class BotClient extends Client {
   }
 
   private async onReady() {
-    logger.info(`Logged in as ${this.user?.tag}!`);
-
     this.guildInstance = await this.guilds.fetch(SERVER_ID);
-    if (!(this.guildInstance instanceof Guild)) throw new Error(`GuildInstance Fetch Error!`);
-
-    this.managerChannel = await this.fetchTextChannel(CHANNEL_MANAGER_ID);
-    this.announcementsChannel = await this.fetchTextChannel(CHANNEL_PUBLIC_ID);
+    this.managerChannel = (await this.channels.fetch(CHANNEL_MANAGER_ID)) as TextChannel;
+    this.announcementsChannel = (await this.channels.fetch(CHANNEL_PUBLIC_ID)) as TextChannel;
 
     cron.schedule(config.BOT_REMINDER_TIME, () => void SendRemindMessage(this), {
       timezone: config.LOCAL_TIMEZONE,
     });
 
     logger.info(`✅ Ready: ${JSON.stringify(this.guildInstance.name)}`);
-  }
-
-  private async fetchTextChannel(id: string): Promise<TextChannel> {
-    const ch = await this.channels.fetch(id);
-    if (!ch || !(ch instanceof TextChannel)) throw new Error(`Channel ${id} is not a TextChannel.`);
-    return ch;
   }
 
   private registerEvents(): void {
@@ -62,5 +60,18 @@ export class BotClient extends Client {
       logger.info(`---- Member Update: id=${newState.id} name=${newState.member?.displayName}`);
       guildMemberService.upsert(newState.id, newState.member?.displayName, new Date());
     });
+  }
+
+  public async initMemberDB() {
+    try {
+      const list: Map<string, GuildMember> = await this.guildInstance.members.fetch();
+      const date = new Date();
+      list.forEach(({id, displayName, user}) => {
+        if (user.bot) return;
+        guildMemberService.upsert(id, displayName, date);
+      });
+    } catch (error) {
+      logger.error('initMemberDB:', error);
+    }
   }
 }

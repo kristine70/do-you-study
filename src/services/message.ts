@@ -13,9 +13,8 @@ interface IListObj {
 
 const checkUserState = (user: GuildMember) => {
   if (user.user.bot) return false;
-  if (user.roles.cache.some((role) => role.name.toLowerCase() === 'star')) {
-    return false;
-  }
+  if (user.roles.cache.some((role) => role.name.toLowerCase() === 'study_star')) return false;
+
   return true;
 };
 
