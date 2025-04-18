@@ -19,9 +19,7 @@
 
 ### Google Cloud
 
-1. download google cloud sdk `brew install --cask google-cloud-sdk`
-2. find the target project and set up as the default project `gcloud config set project VALUE`
-3. set up ssh `gcloud compute config-ssh`
+1. just connect VM using browser ssh.
 
 ### Set Up Environment
 
@@ -58,3 +56,4 @@ git clone git@github.com:kristine70/do-you-study.git
 7. add .env file
 8. `npm run server`
 9. `pm2 start 'npm run server' --name study-bot`
+10. `pm2 logs`
