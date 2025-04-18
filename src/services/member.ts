@@ -60,7 +60,7 @@ class MembersService {
   public fetchAll() {
     let result: {user_id: string; last_vc_time: string}[] = [];
     try {
-      result = this.stmts.fetchAll.all();
+      result = this.stmts.fetchAll.all() as {user_id: string; last_vc_time: string}[];
     } catch (error) {
       logger.error(`[fetchAll] failed: ` + (error as Error).message);
     }

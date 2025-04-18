@@ -1,6 +1,9 @@
 import {Client, GatewayIntentBits, Events, Guild, TextChannel, Snowflake} from 'discord.js';
 import {logger} from '../utils/logger';
 import guildMemberService from './member';
+import config from '../config';
+import * as cron from 'node-cron';
+import {SendRemindMessage} from './message';
 const {SERVER_ID, CHANNEL_MANAGER_ID, CHANNEL_PUBLIC_ID} = process.env as Record<string, Snowflake>;
 const clientOptions = {
   intents: [
@@ -11,9 +14,9 @@ const clientOptions = {
 };
 
 export class BotClient extends Client {
-  private guildInstance!: Guild;
-  private managerChannel!: TextChannel;
-  private announcementsChannel!: TextChannel;
+  public guildInstance!: Guild;
+  public managerChannel!: TextChannel;
+  public announcementsChannel!: TextChannel;
 
   constructor() {
     super(clientOptions);
@@ -28,6 +31,10 @@ export class BotClient extends Client {
 
     this.managerChannel = await this.fetchTextChannel(CHANNEL_MANAGER_ID);
     this.announcementsChannel = await this.fetchTextChannel(CHANNEL_PUBLIC_ID);
+
+    cron.schedule(config.BOT_REMINDER_TIME, () => void SendRemindMessage(this), {
+      timezone: config.LOCAL_TIMEZONE,
+    });
 
     logger.info(`✅ Ready: ${JSON.stringify(this.guildInstance.name)}`);
   }
