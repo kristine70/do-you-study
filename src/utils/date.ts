@@ -29,5 +29,5 @@ export const stringfyTime = (time: Date) =>
   dayjs(time).tz(config.LOCAL_TIMEZONE).format(DATE_TIME_FORMAT);
 
 export const beforeXdays = (t: Date, x: number) => {
-  return dayjs().subtract(x, 'day').format(DATE_FORMAT) === dayjs(t).format(DATE_FORMAT);
+  return dayjs().tz(config.LOCAL_TIMEZONE).subtract(x, 'day').format(DATE_FORMAT) === dayjs(t).format(DATE_FORMAT);
 };
