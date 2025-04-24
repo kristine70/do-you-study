@@ -23,7 +23,7 @@ const fetchMembersInfo = async (guild: Guild, userIds: string[]) => {
   try {
     members = await guild.members.fetch({user: userIds});
     const missing = userIds.filter((id) => !members.has(id));
-    if (missing.length) logger.warn(`Could not find members for IDs: ${missing.join(', ')}`);
+    if (missing.length) logger.warn(`Could not find members for IDs: "${missing.join('", "')}"`);
   } catch (err) {
     logger.error(`Failed to fetch members`, err);
   }
@@ -61,8 +61,9 @@ const sendMessage = async (channel: TextChannel, userIds: string[], content: str
 };
 
 export const SendRemindMessage = async (bot: BotClient) => {
-  const {list7, list14} = await getLists(bot.guildInstance);
-  const content14 = `**${stringfyTime(new Date())}**: ${list14.map((id) => `<@${id}>`).join(' ')}`;
+  const res = await getLists(bot.guildInstance);
+  const {list7, list14} = res;
+  const content14 = `**${stringfyTime(new Date())}**: ${list14.map((id) => `<@${id}>`).join(' ')}`; 
   if (list7.length > 0) void sendMessage(bot.managerChannel, list7, config.MESSAGE_CONTENT(list7));
   //* change to the public channel
   void sendMessage(bot.managerChannel, list14, content14);
