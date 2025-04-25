@@ -20,6 +20,15 @@
 ### Google Cloud
 
 1. just connect VM using browser ssh.
+2. set up local ssh connection
+
+```bash
+brew install --cask google-cloud-sdk
+gcloud init ## select the project if only have one. do not change zone.
+gcloud compute ssh USERNAME@INSTANCE_NAME --zone=us-central1-c ## may change the name and the zone
+gcloud compute config-ssh ## set up a ssh config for vscode connection
+## remember to change ~/.ssh/config file and add User current name
+```
 
 ### Set Up Environment
 
@@ -41,7 +50,7 @@ set up github ssh, paste to github, and clone the repo
 
 ```bash
 cd ~/.ssh
-ssh-keygen -o -t rsa -C "kristine.liang@outlook.com"
+ssh-keygen -o -t rsa -C "NAME_EXAMPLE@outlook.com"
 cat id_rsa.pub # paste to github
 cd
 git clone git@github.com:kristine70/do-you-study.git
