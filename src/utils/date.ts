@@ -10,8 +10,9 @@ dayjs.extend(timezone);
 
 export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 export const DATE_FORMAT = 'YYYY-MM-DD';
+const Now = () => dayjs().tz(config.LOCAL_TIMEZONE);
 
-export const currentTimeString = () => dayjs().tz(config.LOCAL_TIMEZONE).format(DATE_TIME_FORMAT);
+export const currentTimeString = () => Now().format(DATE_TIME_FORMAT);
 
 export const parseTime = (timeString: string): Date => {
   try {
@@ -29,5 +30,5 @@ export const stringfyTime = (time: Date) =>
   dayjs(time).tz(config.LOCAL_TIMEZONE).format(DATE_TIME_FORMAT);
 
 export const beforeXdays = (t: Date, x: number) => {
-  return dayjs().tz(config.LOCAL_TIMEZONE).subtract(x, 'day').format(DATE_FORMAT) === dayjs(t).format(DATE_FORMAT);
+  return Now().subtract(x, 'day').format(DATE_FORMAT) === stringfyTime(t).slice(0, 10);
 };
