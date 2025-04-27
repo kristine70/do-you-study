@@ -38,7 +38,7 @@ class MembersService {
 
       const info = this.stmts.upsert.run(userId, userName, iso);
       if (info.changes === 0) throw new Error('Nothing changed!');
-      else logger.info(`[Upsert ${info.changes}] success: id=${userId}`);
+      else logger.info(`[Upsert ${info.changes}] success: id=${userId} name=${userName}`);
     } catch (error) {
       logger.error(`[Upsert] failed for ${userId}: ${(error as Error).message}`);
     }

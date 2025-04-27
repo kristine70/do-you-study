@@ -48,16 +48,16 @@ export class BotClient extends Client {
 
     this.on(Events.GuildMemberAdd, (member) => {
       if (member.user.bot) return;
-      logger.info(`---- Member Add: id=${member.id} name=${member.displayName}`);
+      logger.info(`---- Add ----`);
       guildMemberService.upsert(member.id, member.displayName, new Date());
     });
     this.on(Events.GuildMemberRemove, (member) => {
-      logger.info(`---- Member Delete: id=${member.id} name=${member.displayName}`);
+      logger.info(`---- Member Delete: name=${member.displayName} ----`);
       guildMemberService.delete(member.id);
     });
     this.on(Events.VoiceStateUpdate, (oldState, newState) => {
       if (newState.member?.user.bot) return;
-      logger.info(`---- Member Update: id=${newState.id} name=${newState.member?.displayName}`);
+      logger.info(`---- Update ----`);
       guildMemberService.upsert(newState.id, newState.member?.displayName, new Date());
     });
   }
